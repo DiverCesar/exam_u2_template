@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const DB_URL = "http://localhost:5000/db/customers";
-
-router.delete("/customer/:id", async (req, res) => {
+router.delete(`/${process.env.APP_NAME}/${process.env.ITEM_SINGULAR}/:id`, async (req, res) => {
     try {
-        const response = await fetch(`${DB_URL}/${req.params.id}`, {
+        const response = await fetch(`http://localhost:${process.env.PORT_DB}/db/${process.env.ITEM_SINGULAR}/${req.params.id}`, {
             method: "DELETE"
         });
         const data = await response.json();
