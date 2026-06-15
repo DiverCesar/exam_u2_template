@@ -7,7 +7,7 @@ const dataSchema = new mongoose.Schema(
         brand: { type: String },
         model: { type: String },
         price: { type: Number },
-        date: { type: String },
+        date: { type: Date, default: Date.now },
         description: { type: String },
         isActive: { type: Boolean }
     },
