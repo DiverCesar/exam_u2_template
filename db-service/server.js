@@ -1,62 +1,54 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const mongoose = require("mongoose");
-const Customer = require("./models/Customer");
+const cors = require("cors");
+const Data = require("./models/Schema");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5008;
 
+app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI);
 
-app.get("/db/customers", async (req, res) => {
+app.get(`/db/${process.env.ITEM_PLURAL}`, async (req, res) => {
     try {
-        const data = await Customer.find();
+        const data = await Data.find();
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-app.get("/db/customers/:id", async (req, res) => {
+app.post(`/db/${process.env.ITEM_SINGULAR}`, async (req, res) => {
     try {
-        const data = await Customer.findOne({ id: req.params.id });
-        if (!data) return res.status(404).json({ error: "Not found" });
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-app.post("/db/customers", async (req, res) => {
-    try {
-        const newCustomer = new Customer(req.body);
-        const savedCustomer = await newCustomer.save();
-        res.status(201).json(savedCustomer);
+        const newData = new Data(req.body);
+        const savedData = await newData.save();
+        res.status(201).json(savedData);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
 
-app.put("/db/customers/:id", async (req, res) => {
+app.put(`/db/${process.env.ITEM_SINGULAR}/:id`, async (req, res) => {
     try {
-        const updatedCustomer = await Customer.findOneAndUpdate(
+        const updatedData = await Data.findOneAndUpdate(
             { id: req.params.id },
             req.body,
             { new: true }
         );
-        if (!updatedCustomer) return res.status(404).json({ error: "Not found" });
-        res.json(updatedCustomer);
+        if (!updatedData) return res.status(404).json({ error: "Not found" });
+        res.json(updatedData);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
 
-app.delete("/db/customers/:id", async (req, res) => {
+app.delete(`/db/${process.env.ITEM_SINGULAR}/:id`, async (req, res) => {
     try {
-        const deletedCustomer = await Customer.findOneAndDelete({ id: req.params.id });
-        if (!deletedCustomer) return res.status(404).json({ error: "Not found" });
+        const deletedData = await Data.findOneAndDelete({ id: req.params.id });
+        if (!deletedData) return res.status(404).json({ error: "Not found" });
         res.json({ message: "Deleted" });
     } catch (error) {
         res.status(500).json({ error: error.message });
