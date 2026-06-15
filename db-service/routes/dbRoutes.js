@@ -2,10 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Data = require("../models/Schema");
 
-const plural = process.env.ITEM_PLURAL;
-const singular = process.env.ITEM_SINGULAR;
-
-router.get(`/${plural}`, async (req, res) => {
+router.get(`/${process.env.ITEM_PLURAL}`, async (req, res) => {
     try {
         const data = await Data.find();
         res.json(data);
@@ -14,7 +11,7 @@ router.get(`/${plural}`, async (req, res) => {
     }
 });
 
-router.post(`/${singular}`, async (req, res) => {
+router.post(`/${process.env.ITEM_SINGULAR}`, async (req, res) => {
     try {
         const newData = new Data(req.body);
         const savedData = await newData.save();
@@ -24,7 +21,7 @@ router.post(`/${singular}`, async (req, res) => {
     }
 });
 
-router.put(`/${singular}/:id`, async (req, res) => {
+router.put(`/${process.env.ITEM_SINGULAR}/:id`, async (req, res) => {
     try {
         const updatedData = await Data.findOneAndUpdate(
             { id: req.params.id },
@@ -38,7 +35,7 @@ router.put(`/${singular}/:id`, async (req, res) => {
     }
 });
 
-router.delete(`/${singular}/:id`, async (req, res) => {
+router.delete(`/${process.env.ITEM_SINGULAR}/:id`, async (req, res) => {
     try {
         const deletedData = await Data.findOneAndDelete({ id: req.params.id });
         if (!deletedData) return res.status(404).json({ error: "Not found" });
