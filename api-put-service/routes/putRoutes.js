@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const DB_URL = "http://localhost:5000/db/customers";
-
-router.put("/customer/:id", async (req, res) => {
+router.put(`/${process.env.APP_NAME}/${process.env.ITEM_SINGULAR}/:id`, async (req, res) => {
     try {
-        const response = await fetch(`${DB_URL}/${req.params.id}`, {
+        const response = await fetch(`http://localhost:${process.env.PORT_DB}/db/${process.env.ITEM_SINGULAR}/${req.params.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(req.body)
