@@ -11,7 +11,10 @@ const dataSchema = new mongoose.Schema(
         description: { type: String },
         isActive: { type: Boolean, required: true }
     },
-    { collection: process.env.COLLECTION_NAME }
+    { 
+        collection: process.env.ITEM_PLURAL,
+        versionKey: false
+    }
 );
 
 module.exports = mongoose.model("Data", dataSchema);
